@@ -6,7 +6,7 @@
 <title>MUSOR DROP</title>
 <meta name="description" content="Твой высокий шанс на большой дроп — MUSOR DROP. Теперь с PIPIS DROP.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗑️</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0b0b12;
@@ -30,8 +30,8 @@
       radial-gradient(circle at 20% 0%, #ff2fa822 0, transparent 40%),
       radial-gradient(circle at 80% 100%, #19e3ff1a 0, transparent 40%);
     color: var(--text);
-    font-family: "VT323", monospace;
-    font-size: 22px;
+    font-family: "Pixelify Sans", monospace;
+    font-size: 19px;
     min-height: 100vh;
     overflow-x: hidden;
   }
@@ -114,7 +114,7 @@
     background-image: linear-gradient(0deg, color-mix(in srgb, var(--c) 30%, transparent), transparent 70%);
   }
   .item .emo { font-size: 52px; line-height: 1; margin-bottom: 8px; }
-  .item .nm { font-size: 17px; line-height: 1.05; color: var(--text); }
+  .item .nm { font-size: 15px; line-height: 1.05; color: var(--text); }
 
   .controls { display: flex; gap: 10px; margin: 14px 0 6px; flex-wrap: wrap; }
   .btn {
@@ -129,12 +129,12 @@
   .btn.ghost { background: var(--panel); color: var(--text); box-shadow: 4px 4px 0 var(--line); border: 2px solid var(--line); }
   .btn.free { background: var(--cyan); display: none; }
 
-  .spam { min-height: 58px; color: var(--cyan); padding: 8px 0; font-size: 24px; }
+  .spam { min-height: 58px; color: var(--cyan); padding: 8px 0; font-size: 21px; }
   .spam .hl { color: var(--yellow); }
   .spam .pk { color: var(--pink); }
 
   .odds { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 20px; }
-  .odd { font-size: 17px; padding: 3px 8px; border-left: 4px solid var(--c); background: var(--panel); color: var(--muted); }
+  .odd { font-size: 15px; padding: 3px 8px; border-left: 4px solid var(--c); background: var(--panel); color: var(--muted); }
 
   h2 { font-family: "Press Start 2P", monospace; font-size: 14px; margin: 12px 0; color: var(--pink); }
   .inv { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
@@ -162,7 +162,7 @@
   @keyframes pop { from { transform: scale(.3) rotate(-8deg); opacity: 0; } }
   .card .emo { font-size: 96px; }
   .card .rar { font-family: "Press Start 2P", monospace; font-size: 11px; color: var(--c); margin: 12px 0 6px; }
-  .card .nm { font-size: 30px; }
+  .card .nm { font-size: 26px; }
   .card .val { color: var(--yellow); margin: 6px 0 16px; }
   .card .row { display: flex; gap: 10px; }
   .card .btn { flex: 1; font-size: 11px; padding: 14px 8px; }
@@ -171,14 +171,44 @@
   .pipis-rain span { position: absolute; top: -60px; font-size: 40px; animation: fall linear forwards; }
   @keyframes fall { to { transform: translateY(115vh) rotate(720deg); } }
 
-  footer { margin: 30px 0 10px; color: var(--muted); font-size: 17px; text-align: center; }
+  .promo {
+    display: flex; align-items: center; gap: 14px; text-decoration: none;
+    margin: 6px 0 20px; padding: 14px 16px;
+    background: repeating-linear-gradient(45deg, #1b1320, #1b1320 12px, #20152a 12px, #20152a 24px);
+    border: 3px solid var(--pink); color: var(--text);
+    box-shadow: 5px 5px 0 var(--yellow);
+    transition: transform .1s, box-shadow .1s;
+  }
+  .promo:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--yellow); }
+  .promo .ic {
+    flex: 0 0 52px; height: 52px; border-radius: 50%; background: #29a9eb;
+    display: flex; align-items: center; justify-content: center;
+    animation: bounce 1.2s infinite;
+  }
+  @keyframes bounce { 50% { transform: translateY(-4px) rotate(-8deg); } }
+  .promo .tx { flex: 1; line-height: 1.1; }
+  .promo .t1 { font-family: "Press Start 2P", monospace; font-size: 12px; color: var(--yellow); margin-bottom: 6px; }
+  .promo .t2 { font-size: 19px; }
+  .promo .t2 b { color: var(--cyan); font-weight: normal; }
+  .promo .go {
+    font-family: "Press Start 2P", monospace; font-size: 11px;
+    background: var(--pink); color: #fff; padding: 12px 12px; white-space: nowrap;
+  }
+
+  footer { margin: 30px 0 10px; color: var(--muted); font-size: 15px; text-align: center; line-height: 1.4; }
+  footer a { color: var(--yellow); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (max-width: 520px) {
+    .promo { flex-wrap: wrap; }
+    .promo .go { width: 100%; text-align: center; }
+  }
 
   @media (max-width: 520px) {
-    body { font-size: 20px; }
+    body { font-size: 17px; }
     .roulette { height: 140px; }
     .item { flex-basis: 100px; height: 115px; }
     .item .emo { font-size: 40px; }
-    .item .nm { font-size: 15px; }
+    .item .nm { font-size: 13px; }
     .tab { font-size: 10px; }
   }
 </style>
@@ -212,12 +242,24 @@
 
   <div class="spam" id="spam">ЭЙ, [[ПОКУПАТЕЛЬ]]! ЖМИ КНОПКУ И СТАНЬ <span class="hl">[[BIG SHOT]]</span>!!</div>
 
+  <a class="promo" href="https://t.me/BIG_SHOT_prod" target="_blank" rel="noopener">
+    <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M9.8 15.2l-.4 5.4c.6 0 .8-.3 1.1-.6l2.6-2.5 5.4 4c1 .5 1.7.3 2-.9l3.6-17c.3-1.5-.6-2.1-1.6-1.7L1.3 9.9c-1.4.6-1.4 1.4-.2 1.8l5.4 1.7L19 5.5c.6-.4 1.1-.2.7.2z"/></svg></div>
+    <div class="tx">
+      <div class="t1">[[ЭКСКЛЮЗИВНОЕ]] ПРЕДЛОЖЕНИЕ!!!</div>
+      <div class="t2">ПОДПИШИСЬ НА <b>@BIG_SHOT_prod</b> И СТАНЬ [[BIG SHOT]] УЖЕ [[СЕГОДНЯ]]!</div>
+    </div>
+    <div class="go">ПОДПИСАТЬСЯ ▶</div>
+  </a>
+
   <div class="odds" id="odds"></div>
 
   <h2>ИНВЕНТАРЬ [[ДРАГОЦЕННОСТЕЙ]]</h2>
   <div class="inv" id="inv"><div class="empty">ПУСТО. КАК И ТВОИ [[ПЕРСПЕКТИВЫ]].</div></div>
 
-  <footer>Фан-страница по мотивам мема. Валюта ненастоящая, ставок и выплат нет — только мусор и pipis.</footer>
+  <footer>
+    Создатель: <a href="https://github.com/PtrH1kari" target="_blank" rel="noopener">@PtrH1kari</a> · ТГК: <a href="https://t.me/BIG_SHOT_prod" target="_blank" rel="noopener">@BIG_SHOT_prod</a><br>
+    Фан-страница по мотивам мема. Валюта ненастоящая, ставок и выплат нет — только мусор и pipis.
+  </footer>
 </div>
 
 <div class="modal" id="modal">
