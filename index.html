@@ -22,6 +22,7 @@
     --purple: #a24bff;
     --red: #ff3b3b;
     --gold: #ffc21a;
+  --legend: #00ffc8;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -141,6 +142,7 @@
   .inv .item { flex: none; width: auto; height: 120px; margin: 0; cursor: pointer; position: relative; }
   .inv .item .emo { font-size: 40px; }
   .inv .item .val { font-size: 15px; color: var(--yellow); margin-top: 4px; }
+  .inv .item.nosell:hover::after { content: "ПОКАЗАТЬ"; }
   .inv .item:hover::after {
     content: "ПРОДАТЬ"; position: absolute; inset: 0; background: #000c;
     display: flex; align-items: center; justify-content: center;
@@ -166,6 +168,13 @@
   .card .val { color: var(--yellow); margin: 6px 0 16px; }
   .card .row { display: flex; gap: 10px; }
   .card .btn { flex: 1; font-size: 11px; padding: 14px 8px; }
+  .card .prize { display: none; margin: 0 0 16px; padding: 12px; border: 2px dashed var(--legend); color: var(--text); font-size: 18px; line-height: 1.25; }
+  .card .prize b { color: var(--legend); font-weight: 700; }
+  .card .prize .code { display: block; margin-top: 8px; font-family: "Press Start 2P", monospace; font-size: 11px; color: var(--yellow); word-break: break-all; }
+  .card.legend .prize { display: block; }
+  .card.legend { animation: pop .35s cubic-bezier(.2, 1.6, .4, 1), rainbow 1.5s linear infinite; }
+  @keyframes rainbow { 0% { border-color: #00ffc8; } 33% { border-color: #ff2fa8; } 66% { border-color: #ffe600; } 100% { border-color: #00ffc8; } }
+  .card a.btn { text-decoration: none; display: flex; align-items: center; justify-content: center; }
 
   .pipis-rain { position: fixed; inset: 0; pointer-events: none; z-index: 11; overflow: hidden; }
   .pipis-rain span { position: absolute; top: -60px; font-size: 40px; animation: fall linear forwards; }
@@ -268,9 +277,16 @@
     <div class="rar" id="wRar"></div>
     <div class="nm" id="wName"></div>
     <div class="val" id="wVal"></div>
+    <div class="prize" id="wPrize">
+      ТЫ ВЫБИЛ <b>[[ЛЕГЕНДАРНУЮ ДИСКЕТУ]]</b>!!!<br>
+      СДЕЛАЙ СКРИНШОТ ЭТОГО ОКНА И СКИНЬ В ТГК <b>@BIG_SHOT_prod</b>.<br>
+      КТО ПЕРВЫЙ — ТОТ И ПОЛУЧАЕТ [[НАСТОЯЩИЙ ПРИЗ]]!
+      <span class="code" id="wCode"></span>
+    </div>
     <div class="row">
       <button class="btn" id="keep">ЗАБРАТЬ</button>
       <button class="btn ghost" id="sell">ПРОДАТЬ</button>
+      <a class="btn ghost" id="tgBtn" href="https://t.me/BIG_SHOT_prod" target="_blank" rel="noopener" style="display:none">В ТГК ▶</a>
     </div>
   </div>
 </div>
@@ -283,6 +299,7 @@ const R = {
   purple: { name: "ЭЛИТНЫЙ МУСОР", c: "var(--purple)" },
   red:    { name: "[[ЗАПРЕЩЁНКА]]", c: "var(--red)" },
   gold:   { name: "★ PIPIS ★",    c: "var(--gold)" },
+  legend: { name: "★★★ [[ЛЕГЕНДА]] ★★★", c: "var(--legend)" },
 };
 
 const CASES = {
@@ -295,9 +312,12 @@ const CASES = {
       { e: "🥫", n: "Мятая банка",         r: "blue",   v: 4,   w: 14 },
       { e: "🔋", n: "Дохлая батарейка",    r: "blue",   v: 5,   w: 11 },
       { e: "📼", n: "Кассета без плёнки",  r: "purple", v: 12,  w: 7 },
+      { e: "📇", n: "Мини-визитка",         r: "blue",   v: 6,   w: 8 },
       { e: "📱", n: "Телефон [[ПОЧТИ]] рабочий", r: "purple", v: 18, w: 5 },
+      { e: "🏷️", n: "Наклейка MUSOR DROP",  r: "purple", v: 15,  w: 4 },
       { e: "💿", n: "Диск «1000 игр»",     r: "red",    v: 45,  w: 2.4 },
       { e: "🥚", n: "PIPIS",               r: "gold",   v: 150, w: 0.6 },
+      { e: "💾", n: "[[ЛЕГЕНДАРНАЯ]] ДИСКЕТА", r: "legend", v: 9999, w: 0.05 },
     ],
   },
   pipis: {
@@ -307,10 +327,13 @@ const CASES = {
       { e: "🍳", n: "Яичница (не pipis)",  r: "gray",   v: 5,   w: 20 },
       { e: "🐣", n: "Pipis-младший",       r: "blue",   v: 12,  w: 18 },
       { e: "🥚", n: "Pipis б/у",           r: "blue",   v: 18,  w: 14 },
+      { e: "📇", n: "Мини-визитка pipis",   r: "blue",   v: 15,  w: 10 },
       { e: "🪺", n: "Гнездо pipis",        r: "purple", v: 40,  w: 10 },
+      { e: "🏷️", n: "Наклейка PIPIS DROP",  r: "purple", v: 35,  w: 6 },
       { e: "🎁", n: "Pipis в подарочной упаковке", r: "red", v: 90, w: 5 },
       { e: "🥚", n: "PIPIS",               r: "gold",   v: 250, w: 6 },
       { e: "👑", n: "[[КОРОЛЕВСКИЙ]] PIPIS", r: "gold", v: 777, w: 1 },
+      { e: "💾", n: "[[ЛЕГЕНДАРНАЯ]] ДИСКЕТА", r: "legend", v: 9999, w: 0.05 },
     ],
   },
 };
@@ -332,6 +355,10 @@ const LINES = {
   red: [
     "ТЫ ЭТОГО НЕ ВИДЕЛ. Я ЭТОГО НЕ [[ПРОДАВАЛ]].",
     "[[ЗАПРЕЩЁНКА]]!!! ТЫ ПОЧТИ <span class='hl'>[[BIG SHOT]]</span>!",
+  ],
+  legend: [
+    "Я... Я НЕ ВЕРЮ СВОИМ [[ПИКСЕЛЯМ]]!!! <span class='hl'>[[ДИСКЕТА]]</span>!!! БЫСТРЕЕ В ТГК!!!",
+    "ЭТО ЖЕ... <span class='pk'>[[ТА САМАЯ ДИСКЕТА]]</span>!!! ТЫ [[BIGGEST SHOT]]!!! СКРИНЬ И В ТГК!!!",
   ],
   gold: [
     "<span class='hl'>[[PIPIS]]</span>!!!!! ТЫ ТЕПЕРЬ [[BIG SHOT]] НАВСЕГДА!!!",
@@ -437,15 +464,39 @@ function showWin(it) {
   $("modal").classList.add("show");
   const lines = LINES[it.r];
   $("spam").innerHTML = lines[Math.floor(Math.random() * lines.length)];
-  fanfare(it.r === "gold");
-  if (it.r === "gold") pipisRain();
+  const legend = it.r === "legend";
+  $("card").classList.toggle("legend", legend);
+  $("sell").style.display = legend ? "none" : "";
+  $("tgBtn").style.display = legend ? "" : "none";
+  if (legend) $("wCode").textContent = it.code || floppyCode();
+  $("wVal").textContent = legend ? "ЦЕНА: [[БЕСЦЕННО]]" : `ЦЕНА: ${it.v} KROMER`;
+  fanfare(it.r === "gold" || legend);
+  if (it.r === "gold") pipisRain(["🥚", "💰"]);
+  if (legend) { pipisRain(["💾", "💾", "✨", "💰"], 80); setTimeout(() => fanfare(true), 900); }
 }
 
-function pipisRain() {
+// код для проверки скриншота: checkFloppy("FLOPPY-...") в консоли
+const FSALT = "big-shot-1997";
+function fhash(str) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return (h >>> 0).toString(36).toUpperCase().padStart(7, "0").slice(-6);
+}
+function floppyCode() {
+  const t = Date.now().toString(36).toUpperCase();
+  return `FLOPPY-${t}-${fhash(t + FSALT)}`;
+}
+window.checkFloppy = (code) => {
+  const m = /^FLOPPY-([0-9A-Z]+)-([0-9A-Z]{6})$/.exec(String(code).trim().toUpperCase());
+  if (!m || fhash(m[1] + FSALT) !== m[2]) return "ФЕЙК";
+  return "ОК, выпала " + new Date(parseInt(m[1], 36)).toLocaleString("ru-RU");
+};
+
+function pipisRain(set, n = 40) {
   const rain = $("rain");
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < n; i++) {
     const s = document.createElement("span");
-    s.textContent = Math.random() < 0.8 ? "🥚" : "💰";
+    s.textContent = set[Math.floor(Math.random() * set.length)];
     s.style.left = Math.random() * 100 + "vw";
     s.style.animationDuration = 2 + Math.random() * 2.5 + "s";
     s.style.animationDelay = Math.random() * 1.2 + "s";
@@ -457,17 +508,20 @@ function pipisRain() {
 function closeWin(sell) {
   if (!pending) return;
   if (sell) { state.bal += pending.v; beep(1200, 0.08); }
-  else state.inv.unshift(pending);
+  else state.inv.unshift(pending.r === "legend" ? { ...pending, code: $("wCode").textContent } : pending);
   pending = null;
   $("modal").classList.remove("show");
   render();
 }
 
 function sellInv(i) {
+  if (state.inv[i].r === "legend") { showWin(state.inv.splice(i, 1)[0]); return; }
   const it = state.inv.splice(i, 1)[0];
   state.bal += it.v; beep(1200, 0.08);
   render();
 }
+
+const fmtP = (p) => p >= 1 ? p.toFixed(1) : p >= 0.1 ? p.toFixed(2) : p.toFixed(3);
 
 function render() {
   const c = CASES[state.cur];
@@ -480,7 +534,7 @@ function render() {
 
   const total = c.items.reduce((s, i) => s + i.w, 0);
   $("odds").innerHTML = c.items.map(it =>
-    `<div class="odd" style="--c:${R[it.r].c}">${it.e} ${it.n} — ${(it.w / total * 100).toFixed(1)}%</div>`
+    `<div class="odd" style="--c:${R[it.r].c}">${it.e} ${it.n} — ${fmtP(it.w / total * 100)}%</div>`
   ).join("");
 
   const inv = $("inv");
@@ -489,6 +543,7 @@ function render() {
   state.inv.forEach((it, i) => {
     const d = itemEl(it);
     d.insertAdjacentHTML("beforeend", `<div class="val">${it.v} K</div>`);
+    if (it.r === "legend") d.classList.add("nosell");
     d.onclick = () => sellInv(i);
     inv.appendChild(d);
   });
